@@ -28,7 +28,7 @@ export const about = {
   heading: 'About Me',
   subtitle: 'A little about me and my interests!',
   paragraphs: [
-    "Hi! I'm Chelsea, a student studying Computer Science and Engineerring at UCLA! I'm interested in full stack development and AI/ML",
+    "Hi! I'm Chelsea, a student studying Computer Science and Engineering at UCLA! I'm interested in full stack development and AI/ML.",
     "Outside of coding, I enjoy hiking, running, photography, and cafe hopping!",
   ],
   skillsLabel: '// technologies',
@@ -41,8 +41,8 @@ export const about = {
 export const facts: Fact[] = [
   { emoji: '🎓', label: 'UCLA' },
   { emoji: '📍', label: 'Bay Area' },
-  { emoji: '💼', label: 'insert something' },
-  { emoji: '🌙', label: 'insert fun fact' },
+  //{ emoji: '💼', label: 'insert something' },
+  //{ emoji: '🌙', label: 'insert fun fact' },
 ]
 
 
@@ -115,7 +115,8 @@ export const projects: Project[] = [
 export const projectsSection = {
   heading: 'Projects',
   subtitle: "Some things I've been working on - click each card to see more!",
-  comingSoonTitle: 'More coming soon...',
+  comingSoonTitle: 'More coming soon!',
+  comingSoonSubtitle: 'currently brewing in my local environment...',
 }
 
 export const skills: Skill[] = [
