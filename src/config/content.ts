@@ -7,7 +7,7 @@ export const profile = {
   name: 'Chelsea Wang',
   navLabel: 'chelsearwang',
   heroGreeting: 'hello, world',
-  description: 'CSE student at UCLA building full-stack apps and exploring AI/ML (and would very much so like a job)',
+  description: 'CSE student at UCLA interested in software engineering, building full-stack apps and exploring AI/ML',
   primaryCtaLabel: 'See my work',
   secondaryCtaLabel: 'Get in touch',
   nameClickHintSingular: '1 more click...',
