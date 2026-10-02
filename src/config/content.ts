@@ -39,9 +39,9 @@ export const aboutParagraphs = [
 ]
 
 export const carouselImages = [
-  { keyword: 'Chelsea', src: `${import.meta.env.BASE_URL}images/chelsea_wang.jpg`, caption: '', position: 'center' },
-  { keyword: 'photos', src: `${import.meta.env.BASE_URL}images/waterfall.jpg`, caption: '', position: 'top' },
-  { keyword: 'hiking', src: `${import.meta.env.BASE_URL}images/hiking.jpg`, caption: '', position: 'center' },
+  { keyword: 'Chelsea', src: `${import.meta.env.BASE_URL}images/chelsea_wang.jpg`, alt: '', caption: '', position: 'center' },
+  { keyword: 'photos', src: `${import.meta.env.BASE_URL}images/waterfall.jpg`, alt: '', caption: '', position: 'top' },
+  { keyword: 'hiking', src: `${import.meta.env.BASE_URL}images/hiking.jpg`, alt: '', caption: '', position: 'center' },
 ]
 
 export const facts: Fact[] = [
