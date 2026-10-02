@@ -1,108 +1,139 @@
 import { useState } from 'react'
-import { User } from 'lucide-react'
-import { about, facts, skills, sectionIcon } from '../config/content'
+import { about, aboutParagraphs, carouselImages, skills, courses, courseworkSection, profile } from '../config/content'
 import { Reveal } from './Reveal'
-import { Coursework } from './Coursework'
+
+function parseParagraph(text: string) {
+  const parts: { text: string; keyword: string | null }[] = []
+  const regex = /\{\{(\w+)\}\}/g
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = regex.exec(text))) {
+    if (match.index > lastIndex) parts.push({ text: text.slice(lastIndex, match.index), keyword: null })
+    parts.push({ text: match[1], keyword: match[1] })
+    lastIndex = match.index + match[0].length
+  }
+  if (lastIndex < text.length) parts.push({ text: text.slice(lastIndex), keyword: null })
+  return parts
+}
 
 export function About() {
-  const [hovered, setHovered] = useState<number | null>(null)
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null)
+  const [activeImage, setActiveImage] = useState(0)
+  const [imageVisible, setImageVisible] = useState(true)
+
+  const changeImage = (index: number) => {
+    setImageVisible(false)
+    setTimeout(() => {
+      setActiveImage(index)
+      setImageVisible(true)
+    }, 160)
+  }
+  const goToKeyword = (keyword: string) => {
+    const idx = carouselImages.findIndex(img => img.keyword === keyword)
+    if (idx !== -1) changeImage(idx)
+  }
+  const img = carouselImages[activeImage]
 
   return (
-    <section id="about" className="py-24 sm:py-32 px-6 max-w-5xl mx-auto">
-      <div className="grid md:grid-cols-2 gap-16 items-start">
-        {/* left column: bio + skills, stacked */}
+    <section id="about" className="py-28 bg-white dot-grid-faint">
+      <div className="max-w-6xl mx-auto px-6 md:px-10">
         <Reveal>
-          <div className="flex items-center gap-3 mb-3">
-            <div className="p-2 rounded-xl" style={{ background: sectionIcon.bg, color: sectionIcon.color }}>
-              <User size={20} />
-            </div>
-            <h2 className="font-display font-bold" style={{ fontSize: 'clamp(2.25rem, 5vw, 4rem)', lineHeight: 1.1, color: '#1a2340' }}>
-              {about.heading}
-            </h2>
-          </div>
-          <p className="font-mono-custom text-sm mb-6" style={{ color: '#4862ae' }}>{about.subtitle}</p>
-          {about.paragraphs.map((p, i) => (
-            <p key={i} className="font-body leading-relaxed mb-5 last:mb-8" style={{ color: '#5a6a8a', fontSize: '1.05rem' }}>
-              {p}
-            </p>
-          ))}
-          <div className="flex flex-wrap gap-3 mb-8">
-            {facts.map((f, i) => (
-              <div
-                key={i}
-                className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-body transition-all duration-200 cursor-default"
-                style={{
-                  background: hovered === i ? '#c8e6ff' : 'rgba(200,230,255,0.3)',
-                  color: '#1a2340',
-                  border: '1px solid rgba(142,170,255,0.3)',
-                  transform: hovered === i ? 'translateY(-2px)' : 'none',
-                }}
-                onMouseEnter={() => setHovered(i)}
-                onMouseLeave={() => setHovered(null)}
-              >
-                <span>{f.emoji}</span>
-                <span>{f.label}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* skills card stacked below bio */}
-          <div className="relative">
-            <div
-              className="relative w-full rounded-3xl overflow-hidden flex flex-col p-6"
-              style={{ background: 'linear-gradient(135deg, #c8e6ff, #d6d0ff, #c6f0e4)', minHeight: 200 }}
-            >
-              <p className="font-mono-custom text-xs uppercase tracking-wider mb-4 opacity-60" style={{ color: '#1a2340' }}>
-                {about.skillsLabel}
-              </p>
-              <div className="flex flex-wrap gap-2 content-start flex-1">
-                {skills.map(skill => {
-                  const isHovered = hoveredSkill === skill.name
-                  return (
-                    <span
-                      key={skill.name}
-                      className="text-xs px-3 py-1.5 rounded-full font-mono-custom font-medium cursor-default transition-all duration-200 ease-out"
-                      style={{
-                        background: isHovered ? skill.color : 'rgba(255,255,255,0.6)',
-                        color: '#1a2340',
-                        outline: isHovered ? `2px solid ${skill.color}` : '2px solid transparent',
-                        outlineOffset: '1px',
-                        transform: isHovered ? 'scale(1.12) translateY(-2px)' : 'scale(1) translateY(0)',
-                        boxShadow: isHovered ? `0 6px 16px ${skill.color}` : 'none',
-                      }}
-                      onMouseEnter={() => setHoveredSkill(skill.name)}
-                      onMouseLeave={() => setHoveredSkill(null)}
-                    >
-                      {skill.name}
-                    </span>
-                  )
-                })}
-              </div>
-            </div>
-
-            {about.badges.map((b, i) => (
-              <div
-                key={b.label}
-                className="absolute animate-float px-3 py-2 rounded-2xl font-mono-custom text-xs font-bold"
-                style={{
-                  background: b.bg,
-                  color: '#1a2340',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-                  animationDelay: i === 0 ? '0.5s' : '1.2s',
-                  ...(i === 0 ? { top: -16, right: -16 } : { bottom: -16, left: -16 }),
-                }}
-              >
-                {b.label}
-              </div>
-            ))}
+          <div className="flex items-baseline gap-4 mb-16">
+            <span className="font-mono-custom text-xs tracking-widest uppercase" style={{ color: profile.accent }}>{about.eyebrow}</span>
+            <h2 style={{ fontFamily: "'Fraunces', serif", fontSize: '2.75rem', fontWeight: 600 }}>{about.heading}</h2>
           </div>
         </Reveal>
 
-        {/* right column: coursework */}
-        <Reveal delay={0.12}>
-          <Coursework />
-        </Reveal>
+        <div className="grid md:grid-cols-5 gap-12">
+          {/* Left: bio + technologies */}
+          <Reveal className="md:col-span-3">
+            <div className="space-y-5 text-[1.0625rem] text-gray-600 leading-relaxed">
+              {aboutParagraphs.map((paragraph, i) => (
+                <p key={i}>
+                  {parseParagraph(paragraph).map((part, j) =>
+                    part.keyword ? (
+                      <span
+                        key={j}
+                        className="glow-text font-medium underline decoration-dotted underline-offset-3 decoration-gray-300"
+                        onMouseEnter={() => goToKeyword(part.keyword!)}
+                        data-hover
+                      >
+                        {part.text}
+                      </span>
+                    ) : (
+                      <span key={j}>{part.text}</span>
+                    )
+                  )}
+                </p>
+              ))}
+            </div>
+
+            <div className="mt-8">
+              <p className="text-xs tracking-widest uppercase text-gray-400 mb-4 font-mono-custom">{about.techLabel}</p>
+              <div className="flex flex-wrap gap-2">
+                {skills.map(skill => (
+                  <span
+                    key={skill.name}
+                    className="text-xs px-3 py-1.5 rounded-full text-gray-500 bg-gray-50 border border-gray-200 transition-all duration-200 font-mono-custom"
+                    data-hover
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = profile.accent
+                      e.currentTarget.style.color = profile.accent
+                      e.currentTarget.style.backgroundColor = `${profile.accent}0d`
+                      e.currentTarget.style.transform = 'scale(1.08)'
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = ''
+                      e.currentTarget.style.color = ''
+                      e.currentTarget.style.backgroundColor = ''
+                      e.currentTarget.style.transform = 'scale(1)'
+                    }}
+                  >
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Right: photo carousel + coursework note */}
+          <Reveal className="md:col-span-2" delay={0.1}>
+            <div className="flex flex-col gap-5">
+              <div
+                className="relative overflow-hidden rounded-xl"
+                style={{
+                  opacity: imageVisible ? 1 : 0,
+                  transform: imageVisible ? 'scale(1)' : 'scale(0.97)',
+                  transition: 'opacity 0.25s ease, transform 0.25s ease',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.09)',
+                }}
+              >
+                <img src={img.src} alt={img.alt} className="w-full h-auto block rounded-xl" />
+                <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.22) 0%, transparent 55%)' }} />
+                {img.caption && (
+                  <span className="absolute bottom-3 left-3 text-xs text-white/80 tracking-wider font-mono-custom">↳ {img.caption}</span>
+                )}
+              </div>
+
+              {/* Relevant coursework — a single pinned note listing everything */}
+
+              <div
+                className="pinned-note p-5"
+                data-hover
+                style={{ background: '#d9e4ef', transform: 'rotate(-1deg)', ['--r' as string]: '-1deg' }}
+              >
+                <p className="text-xs tracking-widest uppercase text-gray-500 mb-3 font-mono-custom">{courseworkSection.eyebrow}</p>
+                <ul className="space-y-1.5">
+                  {courses.map(c => (
+                    <li key={c.code} className="text-xs text-gray-600 leading-snug font-mono-custom">
+                      <span className="font-semibold text-gray-800">{c.code}</span>
+                      {' — '}{c.title}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
     </section>
   )
